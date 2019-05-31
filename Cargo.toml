@@ -1,0 +1,9 @@
+[package]
+name = "sam_graphics"
+version = "0.1.0"
+authors = ["Sam"]
+edition = "2018"
+
+[dependencies]
+glutin = "*"
+gl = "*"

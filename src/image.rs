@@ -56,6 +56,31 @@ impl Image
         self.data[offset + 2] = color.blue;
     }
 
+    // Draw a rectangle on the image
+    pub fn draw_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
+    {
+        // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
+        let tl_x = std::cmp::min(x0, x1);
+        let tl_y = std::cmp::min(y0, y1);
+
+        let br_x = std::cmp::max(x0, x1);
+        let br_y = std::cmp::max(y0, y1);
+
+        // Draw top and bottom of rectangle
+        for x in tl_x..=br_x
+        {
+            self.set_pixel(x, tl_y, color);
+            self.set_pixel(x, br_y, color);
+        }
+
+        // Draw sides of rectangle
+        for y in tl_y+1..br_y
+        {
+            self.set_pixel(tl_x, y, color);
+            self.set_pixel(br_x, y, color);
+        }
+    }
+
     // Get a c_void pointer to the image data
     pub fn get_ptr(&self) -> *const std::ffi::c_void
     {

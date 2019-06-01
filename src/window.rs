@@ -36,14 +36,6 @@ pub fn create_window(window_width: f64, window_height: f64, image_width: i32, im
             }
         );
 
-        // // Determine pixels
-        // let texture_width: i32 = 2;
-        // let texture_height: i32 = 2;
-        // let texture_pixels: *const std::ffi::c_void = 
-        //     ([255, 0, 0, 255,   0, 255, 0, 255,
-        //       0, 0, 255, 255,   0, 255, 255, 255] as [u8; 16])
-        //         .as_ptr() as *const std::ffi::c_void;
-
         unsafe 
         {
             // Create texture

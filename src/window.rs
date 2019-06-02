@@ -1,7 +1,7 @@
 extern crate gl;
 extern crate glutin;
 
-pub fn create_window(window_width: f64, window_height: f64, image_width: i32, image_height: i32, image_ptr: *const std::ffi::c_void) {
+pub fn create_window<F: Fn() -> *const std::ffi::c_void>(window_width: f64, window_height: f64, image_width: i32, image_height: i32, draw_function: F) {
     // Initialize events loop
     let mut events_loop = glutin::EventsLoop::new();
 
@@ -35,6 +35,10 @@ pub fn create_window(window_width: f64, window_height: f64, image_width: i32, im
                 _ => (),
             }
         );
+
+        // Execute draw function
+        let image_ptr = draw_function();
+
 
         unsafe 
         {

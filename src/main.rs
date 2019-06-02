@@ -35,14 +35,17 @@ fn rand_pixel(pixels: &mut image::Image) -> *const std::ffi::c_void
     // Create blank image
     *pixels = image::Image::new(pixels.width, pixels.height, black_pixel);
 
-    // Get two random numbers
-    use rand::Rng;
-    let mut rng = rand::thread_rng();
-    let rand_x = rng.gen::<usize>() % pixels.width;
-    let rand_y = rng.gen::<usize>() % pixels.height;
+    // Draw a line
+    pixels.draw_line(78, 35, 2, 4, white_pixel);
 
-    // Change pixels
-    pixels.set_pixel(rand_x, rand_y, white_pixel);
+    // // Get two random numbers
+    // use rand::Rng;
+    // let mut rng = rand::thread_rng();
+    // let rand_x = rng.gen::<usize>() % pixels.width;
+    // let rand_y = rng.gen::<usize>() % pixels.height;
+
+    // // Change pixels
+    // pixels.set_pixel(rand_x, rand_y, white_pixel);
 
     // return pointer
     return pixels.get_ptr();

@@ -1,3 +1,6 @@
+// Allow unused functions in this module
+#![allow(dead_code)]
+
 // Define Color struct
 #[derive(Copy, Clone)]
 pub struct Color 
@@ -57,7 +60,7 @@ impl Image
     }
 
     // Draw a rectangle on the image
-    pub fn draw_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
+    pub fn draw_outline_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
     {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
         let tl_x = std::cmp::min(x0, x1);
@@ -78,6 +81,48 @@ impl Image
         {
             self.set_pixel(tl_x, y, color);
             self.set_pixel(br_x, y, color);
+        }
+    }
+
+    pub fn draw_filled_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
+    {
+        // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
+        let tl_x = std::cmp::min(x0, x1);
+        let tl_y = std::cmp::min(y0, y1);
+
+        let br_x = std::cmp::max(x0, x1);
+        let br_y = std::cmp::max(y0, y1);
+
+        // Fill in rectangular region
+        for x in tl_x..=br_x
+        {
+            for y in tl_y..=br_y
+            {
+                self.set_pixel(x, y, color);
+            }
+        }
+    }
+
+    // Draw a line on the image
+    pub fn draw_line(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
+    {
+        // Determine number of points to space between the given points
+        let x_dist: f64 = x1 as f64 - x0 as f64;
+        let y_dist: f64 = y1 as f64 - y0 as f64;
+
+        let n_points: f64 = (x_dist.powi(2) + y_dist.powi(2)).sqrt().ceil();
+
+        // Determine the step size
+        let x_step: f64 = x_dist / n_points;
+        let y_step: f64 = y_dist / n_points;
+
+        // Set the pixel at each point along the line
+        for i_point in 0..=n_points as usize
+        {
+            let new_x: usize = (x0 as f64 + (x_step * i_point as f64)) as usize;
+            let new_y: usize = (y0 as f64 + (y_step * i_point as f64)) as usize;
+
+            self.set_pixel(new_x, new_y, color);
         }
     }
 

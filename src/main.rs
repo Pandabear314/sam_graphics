@@ -36,7 +36,6 @@ fn rand_pixel(image_width: usize, image_height: usize) -> *const std::ffi::c_voi
 
     // Change pixels
     pixels.set_pixel(rand_x, rand_y, white_pixel);
-    pixels.set_pixel(3, image_height-1, white_pixel);
 
     // return pointer
     return pixels.get_ptr();

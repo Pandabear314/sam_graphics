@@ -7,13 +7,6 @@ mod image;
 
 fn main()
 {
-    // // Create image
-    // let black_pixel = image::Color{red: 0, green: 0, blue: 0};
-    // let white_pixel = image::Color{red: 255, green: 255, blue: 255};
-
-    // let mut pixels: image::Image = image::Image::new(16, 9, black_pixel);
-    // pixels.draw_rect(1, 1, 5, 7, white_pixel);
-
     // Define image size
     let image_width: usize = 160;
     let image_height: usize = 90;

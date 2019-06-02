@@ -59,7 +59,7 @@ impl Image
         self.data[offset + 2] = color.blue;
     }
 
-    // Draw a rectangle on the image
+    // Draw an outline of a rectangle on the image
     pub fn draw_outline_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
     {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
@@ -84,6 +84,7 @@ impl Image
         }
     }
 
+    // Draw a filled in rectangle on the image
     pub fn draw_filled_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
     {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner

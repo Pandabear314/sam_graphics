@@ -1,7 +1,7 @@
 [package]
 name = "sam_graphics"
 version = "0.1.0"
-authors = ["Sam"]
+authors = ["Pandabear314 <panabear314159@gmail.com>"]
 edition = "2018"
 
 [dependencies]

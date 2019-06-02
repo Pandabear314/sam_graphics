@@ -1,3 +1,6 @@
+// Import crates
+extern crate rand;
+
 // Import modules
 mod window;
 mod image;
@@ -33,29 +36,15 @@ fn rand_pixel(image_width: usize, image_height: usize) -> *const std::ffi::c_voi
     let mut pixels: image::Image = image::Image::new(image_width, image_height, black_pixel);
 
     // Get two random numbers
-    let rand_x: usize = (random() * image_width as f64).floor() as usize;
-    let rand_y: usize = (random() * image_height as f64).floor() as usize;
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+    let rand_x = rng.gen::<usize>() % image_width;
+    let rand_y = rng.gen::<usize>() % image_height;
 
     // Change pixels
     pixels.set_pixel(rand_x, rand_y, white_pixel);
+    pixels.set_pixel(3, image_height-1, white_pixel);
 
     // return pointer
     return pixels.get_ptr();
-}
-
-// Define "random" function
-fn random() -> f64
-{
-    // Get current time
-    let time: f64;
-    match std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH)
-    {
-        Ok(n) => time = n.as_micros() as f64,
-        Err(_) => panic!("Invalid system time"),
-    }
-
-    // Create "random" value
-    let rand_val: f64 = time / std::f64::consts::PI;
-
-    return rand_val - rand_val.floor();
 }

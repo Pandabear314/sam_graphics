@@ -39,7 +39,6 @@ pub fn create_window<F: Fn() -> *const std::ffi::c_void>(window_width: f64, wind
         // Execute draw function
         let image_ptr = draw_function();
 
-
         unsafe 
         {
             // Create texture

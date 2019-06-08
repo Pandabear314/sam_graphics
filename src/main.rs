@@ -14,8 +14,8 @@ fn main() {
     let window_height = 900.0;
 
     // Define image size
-    let image_width: usize = 16;
-    let image_height: usize = 9;
+    let image_width = 16;
+    let image_height = 9;
 
     // Create screen buffer
     let screen_buffer: image::Image = 

@@ -63,12 +63,13 @@ fn default_state(screen_buffer: &mut image::Image) {
     // Get two random numbers
     use rand::Rng;
     let mut rng = rand::thread_rng();
-    let rand_x0 = rng.gen::<usize>() % screen_buffer.width;
-    let rand_y0 = rng.gen::<usize>() % screen_buffer.height;
-    let rand_x1 = rng.gen::<usize>() % screen_buffer.width;
-    let rand_y1 = rng.gen::<usize>() % screen_buffer.height;
+    let rand_x0 = rng.gen::<u32>() % screen_buffer.width;
+    let rand_y0 = rng.gen::<u32>() % screen_buffer.height;
+    let rand_x1 = rng.gen::<u32>() % screen_buffer.width;
+    let rand_y1 = rng.gen::<u32>() % screen_buffer.height;
 
     // Draw a line
+    println!("{} {} {} {}", rand_x0, rand_y0, rand_x1, rand_y1);
     screen_buffer.draw_line(rand_x0, rand_y0, rand_x1, rand_y1, image::Color::WHITE);
 }
 

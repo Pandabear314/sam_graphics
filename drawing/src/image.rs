@@ -17,21 +17,21 @@ impl Color {
 // Define Image struct
 pub struct Image {
     data: Vec<u8>,
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
 }
 
 // Implement Image methods
 impl Image {
     // Define constants
     const DEFAULT_ALPHA: u8 = 255 as u8;
-    const BYTES_PER_PIXEL: usize = 4;
+    const BYTES_PER_PIXEL: u32 = 4;
 
     // Define constructor
-    pub fn new(im_width: usize, im_height: usize, background_color: Color) -> Image {
+    pub fn new(im_width: u32, im_height: u32, background_color: Color) -> Image {
         // Create flat image with only background color
         let n_pixels = im_height * im_width;
-        let mut flat_data: Vec<u8> = Vec::with_capacity(n_pixels * Image::BYTES_PER_PIXEL);
+        let mut flat_data: Vec<u8> = Vec::with_capacity((n_pixels * Image::BYTES_PER_PIXEL) as usize);
         for _ in 0..n_pixels {
             flat_data.push(background_color.red);
             flat_data.push(background_color.green);
@@ -44,13 +44,13 @@ impl Image {
     }
 
     // Modify a pixel in the image
-    pub fn set_pixel(&mut self, x: usize, y: usize, color: Color) {
+    pub fn set_pixel(&mut self, x: u32, y: u32, color: Color) {
         // Determine offset into data
-        let inv_y: usize = self.height - y - 1;                 // Invert y coordinate as image is stored upside down
+        let inv_y: u32 = self.height - y - 1;                   // Invert y coordinate as image is stored upside down
 
         let offset: usize = 
-            (inv_y * self.width * Image::BYTES_PER_PIXEL)  +    // Ofset for full rows
-            (x * Image::BYTES_PER_PIXEL);                       // Ofset for partial row
+            ((inv_y * self.width * Image::BYTES_PER_PIXEL)  +   // Ofset for full rows
+            (x * Image::BYTES_PER_PIXEL)) as usize;             // Ofset for partial row
 
         // Modify data
         self.data[offset + 0] = color.red;
@@ -59,7 +59,7 @@ impl Image {
     }
 
     // Draw an outline of a rectangle on the image
-    pub fn draw_outline_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
+    pub fn draw_outline_rect(&mut self, x0: u32, y0: u32, x1: u32, y1: u32, color: Color) {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
         let tl_x = std::cmp::min(x0, x1);
         let tl_y = std::cmp::min(y0, y1);
@@ -81,7 +81,7 @@ impl Image {
     }
 
     // Draw a filled in rectangle on the image
-    pub fn draw_filled_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
+    pub fn draw_filled_rect(&mut self, x0: u32, y0: u32, x1: u32, y1: u32, color: Color) {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
         let tl_x = std::cmp::min(x0, x1);
         let tl_y = std::cmp::min(y0, y1);
@@ -98,7 +98,7 @@ impl Image {
     }
 
     // Draw a line on the image
-    pub fn draw_line(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
+    pub fn draw_line(&mut self, x0: u32, y0: u32, x1: u32, y1: u32, color: Color) {
         // Determine number of points to space between the given points
         let x_dist: f64 = x1 as f64 - x0 as f64;
         let y_dist: f64 = y1 as f64 - y0 as f64;
@@ -110,9 +110,9 @@ impl Image {
         let y_step: f64 = y_dist / n_points;
 
         // Set the pixel at each point along the line
-        for i_point in 0..=n_points as usize {
-            let new_x: usize = (x0 as f64 + (x_step * i_point as f64)) as usize;
-            let new_y: usize = (y0 as f64 + (y_step * i_point as f64)) as usize;
+        for i_point in 0..=n_points as u32 {
+            let new_x: u32 = (x0 as f64 + (x_step * i_point as f64)) as u32;
+            let new_y: u32 = (y0 as f64 + (y_step * i_point as f64)) as u32;
 
             self.set_pixel(new_x, new_y, color);
         }

@@ -1,50 +1,44 @@
 // Import crates
-extern crate rand;
+extern crate glutin;
+extern crate drawing;
+
+// Define namespaces
+use drawing::image;
 
 // Import modules
-mod window;
-mod image;
+mod game;
 
-fn main()
-{
+fn main() {
+    // Define constants
+    let window_width = 1600.0;
+    let window_height = 900.0;
+
     // Define image size
-    let image_width: usize = 160;
-    let image_height: usize = 90;
+    let image_width: usize = 16;
+    let image_height: usize = 9;
 
-    // Define colors
-    let black_pixel = image::Color{ red: 0, green: 0, blue: 0 };
+    // Create screen buffer
+    let screen_buffer: image::Image = 
+        image::Image::new(image_width, image_height, image::Color::BLACK);
 
-    // Create blank image
-    let mut pixels: image::Image = image::Image::new(image_width, image_height, black_pixel);
+    // Initialize events loop
+    let events_loop = glutin::EventsLoop::new();
 
-    // Define draw function
-    let mut draw_fun = || rand_pixel(&mut pixels);
+    // Initialize window builder
+    let window_builder = glutin::WindowBuilder::new()
+        .with_title("")
+        .with_dimensions(glutin::dpi::LogicalSize::new(window_width, window_height));
 
-    // Create new window
-    window::create_window(1600.0, 900.0, image_width as i32, image_height as i32, &mut draw_fun);
-}
+    // Initialize window
+    let windowed_context = glutin::ContextBuilder::new()
+        .build_windowed(window_builder, &events_loop)
+        .unwrap();
 
-// Define drawing function
-fn rand_pixel(pixels: &mut image::Image) -> *const std::ffi::c_void
-{
-    // Define colors
-    let black_pixel = image::Color{ red: 0, green: 0, blue: 0 };
-    let white_pixel = image::Color{ red: 255, green: 255, blue: 255 };
+    let windowed_context = unsafe { windowed_context.make_current().unwrap() };
 
-    // Create blank image
-    *pixels = image::Image::new(pixels.width, pixels.height, black_pixel);
+    // Set window properties
+    windowed_context.window().set_resizable(false);
 
-    // Get two random numbers
-    use rand::Rng;
-    let mut rng = rand::thread_rng();
-    let rand_x0 = rng.gen::<usize>() % pixels.width;
-    let rand_y0 = rng.gen::<usize>() % pixels.height;
-    let rand_x1 = rng.gen::<usize>() % pixels.width;
-    let rand_y1 = rng.gen::<usize>() % pixels.height;
-
-    // Draw a line
-    pixels.draw_line(rand_x0, rand_y0, rand_x1, rand_y1, white_pixel);
-
-    // return pointer
-    return pixels.get_ptr();
+    // Start game
+    game::run(windowed_context, events_loop, screen_buffer, (window_width, window_height));
 }

@@ -3,36 +3,36 @@
 
 // Define Color struct
 #[derive(Copy, Clone)]
-pub struct Color 
-{
+pub struct Color {
     pub red: u8,
     pub green: u8,
     pub blue: u8,
 }
 
+impl Color {
+    pub const BLACK: Color = Color{red: 0, green: 0, blue: 0};
+    pub const WHITE: Color = Color{red: 255, green: 255, blue: 255};
+}
+
 // Define Image struct
-pub struct Image
-{
+pub struct Image {
     data: Vec<u8>,
     pub width: usize,
     pub height: usize,
 }
 
 // Implement Image methods
-impl Image
-{
+impl Image {
     // Define constants
     const DEFAULT_ALPHA: u8 = 255 as u8;
     const BYTES_PER_PIXEL: usize = 4;
 
     // Define constructor
-    pub fn new(im_width: usize, im_height: usize, background_color: Color) -> Image
-    {
+    pub fn new(im_width: usize, im_height: usize, background_color: Color) -> Image {
         // Create flat image with only background color
         let n_pixels = im_height * im_width;
         let mut flat_data: Vec<u8> = Vec::with_capacity(n_pixels * Image::BYTES_PER_PIXEL);
-        for _ in 0..n_pixels
-        {
+        for _ in 0..n_pixels {
             flat_data.push(background_color.red);
             flat_data.push(background_color.green);
             flat_data.push(background_color.blue);
@@ -44,8 +44,7 @@ impl Image
     }
 
     // Modify a pixel in the image
-    pub fn set_pixel(&mut self, x: usize, y: usize, color: Color)
-    {
+    pub fn set_pixel(&mut self, x: usize, y: usize, color: Color) {
         // Determine offset into data
         let inv_y: usize = self.height - y - 1;                 // Invert y coordinate as image is stored upside down
 
@@ -60,8 +59,7 @@ impl Image
     }
 
     // Draw an outline of a rectangle on the image
-    pub fn draw_outline_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
-    {
+    pub fn draw_outline_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
         let tl_x = std::cmp::min(x0, x1);
         let tl_y = std::cmp::min(y0, y1);
@@ -70,23 +68,20 @@ impl Image
         let br_y = std::cmp::max(y0, y1);
 
         // Draw top and bottom of rectangle
-        for x in tl_x..=br_x
-        {
+        for x in tl_x..=br_x {
             self.set_pixel(x, tl_y, color);
             self.set_pixel(x, br_y, color);
         }
 
         // Draw sides of rectangle
-        for y in tl_y+1..br_y
-        {
+        for y in tl_y+1..br_y {
             self.set_pixel(tl_x, y, color);
             self.set_pixel(br_x, y, color);
         }
     }
 
     // Draw a filled in rectangle on the image
-    pub fn draw_filled_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
-    {
+    pub fn draw_filled_rect(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
         // Make (x0, y0) top left corner, and (x1, y1) bottom right corner
         let tl_x = std::cmp::min(x0, x1);
         let tl_y = std::cmp::min(y0, y1);
@@ -95,18 +90,15 @@ impl Image
         let br_y = std::cmp::max(y0, y1);
 
         // Fill in rectangular region
-        for x in tl_x..=br_x
-        {
-            for y in tl_y..=br_y
-            {
+        for x in tl_x..=br_x {
+            for y in tl_y..=br_y {
                 self.set_pixel(x, y, color);
             }
         }
     }
 
     // Draw a line on the image
-    pub fn draw_line(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color)
-    {
+    pub fn draw_line(&mut self, x0: usize, y0: usize, x1: usize, y1: usize, color: Color) {
         // Determine number of points to space between the given points
         let x_dist: f64 = x1 as f64 - x0 as f64;
         let y_dist: f64 = y1 as f64 - y0 as f64;
@@ -118,8 +110,7 @@ impl Image
         let y_step: f64 = y_dist / n_points;
 
         // Set the pixel at each point along the line
-        for i_point in 0..=n_points as usize
-        {
+        for i_point in 0..=n_points as usize {
             let new_x: usize = (x0 as f64 + (x_step * i_point as f64)) as usize;
             let new_y: usize = (y0 as f64 + (y_step * i_point as f64)) as usize;
 
@@ -128,8 +119,7 @@ impl Image
     }
 
     // Get a c_void pointer to the image data
-    pub fn get_ptr(&self) -> *const std::ffi::c_void
-    {
+    pub fn get_ptr(&self) -> *const std::ffi::c_void {
         return self.data.as_ptr() as *const std::ffi::c_void;
     }
 }
